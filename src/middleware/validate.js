@@ -39,4 +39,22 @@ const itemSchemas = {
   }),
 };
 
-module.exports = { validate, itemSchemas };
+// ─── Auth Schemas ──────────────────────────────────────────
+const authSchemas = {
+  register: Joi.object({
+    name: Joi.string().min(2).max(100).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).max(100).required(),
+    confirmPassword: Joi.string()
+      .valid(Joi.ref('password'))
+      .required()
+      .messages({ 'any.only': 'Passwords do not match' }),
+  }),
+ 
+  login: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+};
+
+module.exports = { validate, authSchemas, itemSchemas };
